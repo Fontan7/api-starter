@@ -1,0 +1,134 @@
+definitions:
+  controller.ResponsePrivate:
+    properties:
+      id:
+        type: integer
+      location:
+        type: string
+      text:
+        type: string
+    type: object
+  controller.ResponsePublic:
+    properties:
+      id:
+        type: integer
+      text:
+        type: string
+    type: object
+  internal.Error:
+    properties:
+      error:
+        type: string
+      path:
+        type: string
+      status:
+        type: integer
+      time_RFC3339:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: TODO
+    name: API Support
+    url: TODO
+  description: description
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: projectname API
+  version: "0.1"
+paths:
+  /api-starter/v1/{id}:
+    get:
+      description: get something by ID
+      parameters:
+      - description: secret key
+        in: header
+        name: X-API-Key
+        required: true
+        type: string
+      - description: Something ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponsePublic'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal.Error'
+      summary: Get public something
+  /api-starter/v1/private/something:
+    get:
+      description: get private something
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: secret key
+        in: header
+        name: X-API-Key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponsePrivate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal.Error'
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Application:
+        - read
+        - user
+      summary: Get something
+  /health:
+    get:
+      description: always returns OK
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Health check
+      tags:
+      - health
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
